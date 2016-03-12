@@ -5,7 +5,8 @@
       plugins = require('gulp-load-plugins')(),
       path = require('path'),
       browserify = require('browserify'),
-      source = require('vinyl-source-stream');
+      source = require('vinyl-source-stream'),
+      browserSync = require('browser-sync').create();
 
   var paths = {
     src: './src',
@@ -16,6 +17,14 @@
   paths.coffee = [path.join(paths.src, '**/*.coffee')];
   paths.scss = [path.join(paths.src, '**/*.scss')];
   paths.jade = [path.join(paths.src, '**/*.jade')];
+
+  gulp.task('sync', ['build'], function() {
+    browserSync.init({
+      server: {
+        baseDir: paths.out
+      }
+    });
+  });
 
   gulp.task('build', plugins.sequence('clean-out', ['uglify', 'minify-css', 'minify-html'], 'clean-tmp'));
 
