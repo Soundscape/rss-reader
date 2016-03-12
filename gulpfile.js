@@ -14,12 +14,24 @@
   };
 
   paths.coffee = [path.join(paths.src, '**/*.coffee')];
+  paths.scss = [path.join(paths.src, '**/*.scss')];
+  paths.jade = [path.join(paths.src, '**/*.jade')];
 
-  gulp.task('clean', function() {
-    return gulp.src([paths.out, paths.tmp], { read: false })
+  gulp.task('build', plugins.sequence('clean-out', ['uglify', 'minify-css', 'minify-html'], 'clean-tmp'));
+
+  gulp.task('clean', ['clean-out', 'clean-tmp']);
+
+  gulp.task('clean-out', function() {
+    return gulp.src([path.join(paths.out, '**/*.*'), paths.out], { read: false })
       .pipe(plugins.rimraf());
   });
 
+  gulp.task('clean-tmp', function() {
+    return gulp.src([path.join(paths.tmp, '**/*.*'), paths.tmp], { read: false })
+      .pipe(plugins.rimraf());
+  });
+
+  // Script tasks
   gulp.task('coffee', function() {
     return gulp.src(paths.coffee)
       .pipe(plugins.coffee())
@@ -40,5 +52,36 @@
       .pipe(plugins.uglify())
       .pipe(gulp.dest(paths.out))
       .on('error', plugins.util.log.bind(plugins.util, 'Uglify Error'));
+  });
+
+  // SCSS tasks
+  gulp.task('scss', function() {
+    return gulp.src(paths.scss)
+      .pipe(plugins.sass())
+      .pipe(gulp.dest(paths.tmp))
+      .on('error', plugins.util.log.bind(plugins.util, 'SASS Error'));
+  })
+
+  gulp.task('minify-css', ['scss'], function() {
+    return gulp.src(path.join(paths.tmp, '**/*.css'))
+      .pipe(plugins.cleanCss({ compatibility: 'ie8' }))
+      .pipe(gulp.dest(paths.out))
+      .on('error', plugins.util.log.bind(plugins.util, 'CSS Error'));
+  });
+
+  // Jade tasks
+  gulp.task('jade', function() {
+    return gulp.src(paths.jade)
+      .pipe(plugins.jade({ pretty: true }))
+      //.pipe(plugins.minifyHtml({ conditionals: true, spare: true }))
+      .pipe(gulp.dest(paths.tmp))
+      .on('error', plugins.util.log.bind(plugins.util, 'Jade Error'));
+  });
+
+  gulp.task('minify-html', ['jade'], function() {
+    return gulp.src(path.join(paths.tmp, '**/*.html'))
+      .pipe(plugins.minifyHtml({ conditionals: true, spare: true }))
+      .pipe(gulp.dest(paths.out))
+      .on('error', plugins.util.log.bind(plugins.util, 'HTML Error'));
   });
 })();
