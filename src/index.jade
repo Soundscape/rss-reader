@@ -11,9 +11,19 @@ html(lang="en")
     block styles
       link(rel="stylesheet" href="app.css")
 
+    script(src="./app.js")
+
   body.no-select(ng-app="app", ng-cloak="")
     block content
       div(ng-controller="AppCtrl", layout="column", style="height:100%;", ng-cloak="")
+        md-toolbar
+          div.md-toolbar-tools
+            md-button.md-icon-button(aria-label="Settings")
+              md-icon(md-svg-icon="img/icons/menu.svg")
+
+            h2
+              span Toolbar with Icon Buttons
+
         section(layout="row" flex="")
           md-sidenav.md-sidenav-left(
             md-component-id="left",
@@ -21,7 +31,7 @@ html(lang="en")
             md-disable-backdrop,
             md-whiteframe="4"
           )
-            md-toolbar.md-theme-indigo
+            md-toolbar.md-theme-indigo(hide-gt-md="")
               h1.md-toolbar-tools Sidenav Left
 
             md-content(layout-padding="")
@@ -37,4 +47,3 @@ html(lang="en")
                 md-button.md-primary(ng-click="toggleLeft()", hide-gt-md="") Toggle left
 
     block scripts
-      script(src="./app.js")
