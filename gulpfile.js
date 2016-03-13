@@ -18,12 +18,24 @@
   paths.scss = [path.join(paths.src, '**/*.scss')];
   paths.jade = [path.join(paths.src, '**/*.jade')];
 
+  var watch = function () {
+    gulp.watch(paths.coffee, ['uglify']);
+    gulp.watch(paths.jade, ['minify-html'])
+    gulp.watch(paths.scss, ['minify-css']);
+  };
+
+  gulp.task('watch', ['build'], watch);
+
   gulp.task('sync', ['build'], function() {
     browserSync.init({
       server: {
         baseDir: paths.out
       }
     });
+
+    watch();
+
+    gulp.watch([path.join(paths.out, '**/*.html'), path.join(paths.out, '**/*.js')]).on('change', browserSync.reload);
   });
 
   gulp.task('build', plugins.sequence('clean-out', ['uglify', 'minify-css', 'minify-html'], 'clean-tmp'));
@@ -75,6 +87,7 @@
     return gulp.src(path.join(paths.tmp, '**/*.css'))
       .pipe(plugins.cleanCss({ compatibility: 'ie8' }))
       .pipe(gulp.dest(paths.out))
+      .pipe(browserSync.stream())
       .on('error', plugins.util.log.bind(plugins.util, 'CSS Error'));
   });
 
