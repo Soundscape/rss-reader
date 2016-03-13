@@ -35,7 +35,10 @@
 
     watch();
 
-    gulp.watch([path.join(paths.out, '**/*.html'), path.join(paths.out, '**/*.js')]).on('change', browserSync.reload);
+    gulp.watch([
+      path.join(paths.out, '**/*.html'),
+      path.join(paths.out, '**/*.js')
+    ]).on('change', browserSync.reload);
   });
 
   gulp.task('build', plugins.sequence('clean-out', ['uglify', 'minify-css', 'minify-html'], 'clean-tmp'));
@@ -70,7 +73,9 @@
 
   gulp.task('uglify', ['browserify'], function() {
     return gulp.src(path.join(paths.out, 'app.js'))
+      .pipe(plugins.sourcemaps.init())
       .pipe(plugins.uglify())
+      .pipe(plugins.sourcemaps.write())
       .pipe(gulp.dest(paths.out))
       .on('error', plugins.util.log.bind(plugins.util, 'Uglify Error'));
   });
@@ -78,14 +83,20 @@
   // SCSS tasks
   gulp.task('scss', function() {
     return gulp.src(paths.scss)
-      .pipe(plugins.sass())
+      .pipe(plugins.sass({
+          includePaths: ['css'],
+          onError: browserSync.notify
+      }))
+      .pipe(plugins.autoprefixer(['last 5 versions', '> 1%', 'ie 8'], { cascade: true }))
       .pipe(gulp.dest(paths.tmp))
       .on('error', plugins.util.log.bind(plugins.util, 'SASS Error'));
   })
 
   gulp.task('minify-css', ['scss'], function() {
     return gulp.src(path.join(paths.tmp, '**/*.css'))
+      .pipe(plugins.sourcemaps.init())
       .pipe(plugins.cleanCss({ compatibility: 'ie8' }))
+      .pipe(plugins.sourcemaps.write())
       .pipe(gulp.dest(paths.out))
       .pipe(browserSync.stream())
       .on('error', plugins.util.log.bind(plugins.util, 'CSS Error'));
@@ -95,7 +106,6 @@
   gulp.task('jade', function() {
     return gulp.src(paths.jade)
       .pipe(plugins.jade({ pretty: true }))
-      //.pipe(plugins.minifyHtml({ conditionals: true, spare: true }))
       .pipe(gulp.dest(paths.tmp))
       .on('error', plugins.util.log.bind(plugins.util, 'Jade Error'));
   });
