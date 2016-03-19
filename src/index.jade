@@ -1,5 +1,5 @@
 doctype html
-html(lang="en")
+html(lang="en", ng-app="app")
   head
     title RSS Reader
 
@@ -13,37 +13,11 @@ html(lang="en")
 
     script(src="./app.js")
 
-  body.no-select(ng-app="app", ng-cloak="")
+  body.no-select(ng-cloak="")
     block content
-      div(ng-controller="AppCtrl", layout="column", style="height:100%;", ng-cloak="")
-        md-toolbar
-          div.md-toolbar-tools
-            md-button.md-icon-button(aria-label="Settings")
-              md-icon(md-svg-icon="img/icons/menu.svg")
+      section(ui-view="")
 
-            h2
-              span Toolbar with Icon Buttons
-
-        section(layout="row" flex="")
-          md-sidenav.md-sidenav-left(
-            md-component-id="left",
-            md-is-locked-open="$mdMedia('gt-md')",
-            md-disable-backdrop,
-            md-whiteframe="4"
-          )
-            md-toolbar.md-theme-indigo(hide-gt-md="")
-              h1.md-toolbar-tools Sidenav Left
-
-            md-content(layout-padding="")
-              md-button.md-primary(ng-click="close()", hide-gt-md="") Close Sidenav Left
-
-              p(hide-md="", show-gt-md="") This sidenav is locked open on your device. To go back to the default behavior, narrow your display.
-
-          md-content(flex="", layout-padding="")
-            div(layout="column", layout-fill="", layout-align="top center")
-              p The left sidenav will 'lock open' on a medium (>=960px wide) device.
-
-              div
-                md-button.md-primary(ng-click="toggleLeft()", hide-gt-md="") Toggle left
+      a(ui-sref="state1") State 1
+      a(ui-sref="state2") State 2
 
     block scripts
