@@ -14,12 +14,13 @@
     tmp: './tmp'
   };
 
-  paths.coffee = [path.join(paths.src, '**/*.coffee')];
+  paths.babel = [path.join(paths.src, '**/*.js')];
   paths.scss = [path.join(paths.src, '**/*.scss')];
   paths.jade = [path.join(paths.src, '**/*.jade')];
 
   var watch = function () {
     gulp.watch(paths.coffee, ['uglify']);
+    gulp.watch(paths.babel, ['uglify']);
     gulp.watch(paths.jade, ['minify-html'])
     gulp.watch(paths.scss, ['minify-css']);
   };
@@ -56,14 +57,16 @@
   });
 
   // Script tasks
-  gulp.task('coffee', function() {
-    return gulp.src(paths.coffee)
-      .pipe(plugins.coffee())
+  gulp.task('babel', function() {
+    return gulp.src(paths.babel)
+      .pipe(plugins.babel({
+        presets: ['es2015']
+      }))
       .pipe(gulp.dest(paths.tmp))
-      .on('error', plugins.util.log.bind(plugins.util, 'CoffeeScript Error'));
+      .on('error', plugins.util.log.bind(plugins.util, 'Babel Error'));
   });
 
-  gulp.task('browserify', ['coffee'], function() {
+  gulp.task('browserify', ['babel'], function() {
     return browserify(path.join(paths.tmp, 'app.js'))
       .bundle()
       .pipe(source('app.js'))
