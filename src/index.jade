@@ -13,11 +13,37 @@ html(lang="en", ng-app="app")
 
     script(src="./app.js")
 
-  body.no-select(ng-cloak="")
+  body.no-select(ng-cloak="", layout-fill="", layout="row")
     block content
-      a(ui-sref="state1") State 1
-      a(ui-sref="state2") State 2
+      div(layout="row", flex="")
+        md-sidenav.md-sidenav-left(md-component-id="left", md-is-locked-open="$mdMedia('gt-md')", md-disable-backdrop, md-whiteframe="4")
+          md-toolbar.md-theme-indigo
+            h1.md-toolbar-tools Sidenav Left
 
-      section(ui-view="")
+          md-content(layout-padding="")
+            a(ui-sref="state1") State 1
+            a(ui-sref="state2") State 2
+
+        div(layout="column", flex="")
+          md-toolbar
+            div.md-toolbar-tools
+              md-button.md-icon-button(aria-label="Settings")
+                md-icon(md-svg-icon="assets/icons/svg/menu.svg")
+
+              h2
+                span Toolbar with Icon Buttons
+
+              span(flex="")
+
+              md-button.md-icon-button(aria-label="Settings")
+                md-icon(md-svg-icon="assets/icons/svg/cog.svg")
+
+              md-button.md-icon-button(aria-label="Github")
+                md-icon(md-svg-icon="assets/icons/svg/github.svg")
+
+          md-content.main(flex="", layout-padding="")
+            section(ui-view="")
+
+          div footer
 
     block scripts
