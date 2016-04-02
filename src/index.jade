@@ -13,11 +13,13 @@ html(lang="en", ng-app="app")
 
     script(src="./app.js")
 
-  body.no-select(ng-cloak="")
+  body.no-select(layout="row")
     block content
-      a(ui-sref="state1") State 1
-      a(ui-sref="state2") State 2
+      sidebar
 
-      section(ui-view="")
+      section(flex="1", layout="column")
+        menu
+
+        md-content.main-view(flex="1", layout="column", ui-view="")
 
     block scripts

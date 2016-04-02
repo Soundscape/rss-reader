@@ -1,13 +1,12 @@
-import 'angular';
-import 'angular-animate';
-import 'angular-material';
-import 'angular-ui-router';
-import 'angular-messages';
-import {state1} from './components/state1';
-import {state2} from './components/state2';
+// Configuration
+import './app.module';
+import './app.routes';
 
-var app = angular
-  .module('app', ['ui.router', 'ngAria', 'ngMessages', 'ngAnimate', 'ngMaterial']);
+// Directives
+import './shared/menu';
+import './shared/sidebar';
 
-state1(app);
-state2(app);
+// Components
+//import './components/feeds/routes';
+//import './components/feed/routes';
+import './components/feeds';

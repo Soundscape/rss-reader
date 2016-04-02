@@ -14,6 +14,7 @@
     tmp: './tmp'
   };
 
+  paths.assets = [path.join(paths.src, 'assets/**/*.*')];
   paths.babel = [path.join(paths.src, '**/*.js')];
   paths.scss = [path.join(paths.src, '**/*.scss')];
   paths.jade = [path.join(paths.src, '**/*.jade')];
@@ -42,7 +43,7 @@
     ]).on('change', browserSync.reload);
   });
 
-  gulp.task('build', plugins.sequence('clean-out', ['uglify', 'minify-css', 'minify-html'], 'clean-tmp'));
+  gulp.task('build', plugins.sequence('clean-out', ['uglify', 'minify-css', 'minify-html', 'assets'], 'clean-tmp'));
 
   gulp.task('clean', ['clean-out', 'clean-tmp']);
 
@@ -54,6 +55,13 @@
   gulp.task('clean-tmp', function() {
     return gulp.src([path.join(paths.tmp, '**/*.*'), paths.tmp], { read: false })
       .pipe(plugins.rimraf());
+  });
+
+  // Asset tasks
+  gulp.task('assets', function() {
+    return gulp.src(paths.assets)
+      .pipe(gulp.dest(path.join(paths.out, 'assets')))
+      .on('error', plugins.util.log.bind(plugins.util, 'Asset Error'));
   });
 
   // Script tasks

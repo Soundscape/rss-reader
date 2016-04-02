@@ -1,0 +1,15 @@
+md-content(layout="column")
+  md-card
+    md-card-title
+      md-card-title-text
+        span.md-headline {{title}}
+        span.md-subhead {{description}}
+
+  md-divider
+
+  md-card(ng-repeat="item in items")
+    md-card-title
+      md-card-title-text
+        span.md-headline {{title}}
+    md-card-content
+      p {{description}}
