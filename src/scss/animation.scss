@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-[ui-view].main-view {
-  flex: 1;
-}
-=======
-.main {
-  display: flex;
-  flex-direction: column;
-
-  & > [ui-view] {
-    flex: 1;
-  }
->>>>>>> origin/master
-
 [ui-view].main-view.ng-enter, [ui-view].main-view.ng-leave {
   position: absolute;
   left: 0;
